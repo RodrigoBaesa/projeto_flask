@@ -1,17 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 lista_produtos = [
-    {"nome": "Coca-Cola", "descricao": "Refrigerante popular e refrescante, conhecido por seu sabor único e por ser uma opção clássica em eventos e refeições."},
-    {"nome": "Trembo", "descricao": "Suplemento para crescimento muscular, muito utilizado por atletas e fisiculturistas para maximizar os ganhos de força e massa muscular."},
-    {"nome": "Camarão", "descricao": "Fruto do mar versátil e saboroso, pode ser preparado de diversas formas, mas algumas pessoas podem não gostar do seu sabor ou textura."},
-    {"nome": "Mac and Cheese", "descricao": "Prato clássico americano feito de macarrão e queijo, apreciado por seu sabor cremoso e reconfortante, ideal para todas as idades."},
-    {"nome": "iPhone", "descricao": "Smartphone de alta tecnologia da Apple, conhecido por sua interface intuitiva, câmera de qualidade e um vasto ecossistema de aplicativos."},
-    {"nome": "Nike Air Max", "descricao": "Tênis esportivo famoso pelo seu conforto e design inovador, utilizado tanto para atividades físicas quanto para uso casual."},
-    {"nome": "Livro 'O Senhor dos Anéis'", "descricao": "Clássico da literatura de fantasia escrito por J.R.R. Tolkien, apresenta uma épica aventura na Terra Média com personagens memoráveis."},
-    {"nome": "Smart TV Samsung", "descricao": "Televisor inteligente com resolução 4K, oferece uma experiência de visualização imersiva e acesso a diversos aplicativos de streaming."},
-    {"nome": "Pizza Margherita", "descricao": "Pizza clássica italiana feita com molho de tomate, mussarela e manjericão fresco, apreciada por seu sabor autêntico e simples."},
-    {"nome": "Bicicleta Mountain Bike", "descricao": "Bicicleta robusta e versátil, projetada para trilhas e terrenos acidentados, proporcionando uma experiência de ciclismo emocionante e desafiadora."},
-    {"nome": "PlayStation 5", "descricao": "Console de videogame de última geração da Sony, oferece gráficos impressionantes e uma vasta biblioteca de jogos exclusivos."},
+    {"nome": "Coca-Cola", "descricao": "Refrigerante popular e refrescante, conhecido por seu sabor único e por ser uma opção clássica em eventos e refeições.", "preco": 40, "imagem": "https://sm.ign.com/ign_br/cover/d/dark-and-d/dark-and-darker_txee.jpg"},
+    {"nome": "Camarão", "descricao": "Fruto do mar versátil e saboroso, pode ser preparado de diversas formas, mas algumas pessoas podem não gostar do seu sabor ou textura.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
+    {"nome": "Mac and Cheese", "descricao": "Prato clássico americano feito de macarrão e queijo, apreciado por seu sabor cremoso e reconfortante, ideal para todas as idades.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
+    {"nome": "iPhone", "descricao": "Smartphone de alta tecnologia da Apple, conhecido por sua interface intuitiva, câmera de qualidade e um vasto ecossistema de aplicativos.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
+    {"nome": "Nike Air Max", "descricao": "Tênis esportivo famoso pelo seu conforto e design inovador, utilizado tanto para atividades físicas quanto para uso casual.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
 ]
 
 app = Flask(__name__)
@@ -32,7 +26,24 @@ def produtos():
 def produto(nome):
     for produto in lista_produtos:
         if produto["nome"].lower() == nome.lower():
-            return render_template('descricao.html', produto=produto)
-            # return f"{produto['nome']}, {produto['descricao'] }"
-    
-    return "Produto não encontrado"
+            return render_template("produto.html", produto=produto)
+    return "produto não encontrado"
+
+# GET
+@app.route("/produtos/cadastro")
+def cadastro_produto():
+    return render_template("cadastro-produto.html")
+
+# POST
+@app.route("/produtos", methods=['POST'])
+def salvar_produto():
+    nome = request.form['nome']
+    descricao = request.form['descricao']
+    preco = request.form['preco']
+    imagem = request.form['imagem']
+    produto = {"nome": nome, "descricao": descricao, "preco": preco, "imagem": imagem}
+    lista_produtos.append(produto)
+
+    return redirect(url_for("produtos"))
+
+app.run(port=5001)
