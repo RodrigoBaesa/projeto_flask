@@ -1,4 +1,15 @@
 body{
-    background-color: black;
+    background-color: #0A0A0A;
     color: white;
+}
+
+.barra{
+    color: yellow;
+    margin: 10px;
+    width:100px;
+    float:left;
+    display: table;
+}
+.container{
+    text-align: center;
 }

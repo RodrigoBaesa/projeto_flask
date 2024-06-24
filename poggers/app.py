@@ -46,4 +46,9 @@ def salvar_produto():
 
     return redirect(url_for("produtos"))
 
+@app.route("/gerador")
+def gerador():
+    return render_template("gerador.html")
+
+
 app.run(port=5001)
