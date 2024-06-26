@@ -1,12 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-lista_produtos = [
-    {"nome": "Coca-Cola", "descricao": "Refrigerante popular e refrescante, conhecido por seu sabor único e por ser uma opção clássica em eventos e refeições.", "preco": 40, "imagem": "https://sm.ign.com/ign_br/cover/d/dark-and-d/dark-and-darker_txee.jpg"},
-    {"nome": "Camarão", "descricao": "Fruto do mar versátil e saboroso, pode ser preparado de diversas formas, mas algumas pessoas podem não gostar do seu sabor ou textura.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
-    {"nome": "Mac and Cheese", "descricao": "Prato clássico americano feito de macarrão e queijo, apreciado por seu sabor cremoso e reconfortante, ideal para todas as idades.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
-    {"nome": "iPhone", "descricao": "Smartphone de alta tecnologia da Apple, conhecido por sua interface intuitiva, câmera de qualidade e um vasto ecossistema de aplicativos.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
-    {"nome": "Nike Air Max", "descricao": "Tênis esportivo famoso pelo seu conforto e design inovador, utilizado tanto para atividades físicas quanto para uso casual.", "preco": 40, "imagem": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png"},
-]
+def adicionar_produto(p):
+    linha = f"\n{p['nome']},{p['descricao']},{p['preco']},{p['imagem']}"
+    with open("produtos.csv", "a") as file:
+        file.write(linha)
+
+def obter_produtos():
+    with open("produtos.csv", "r") as file:
+        lista_produtos= []
+        for linha in file:
+            nome, descricao, preco, imagem = linha.strip().split(",")
+            produto = {
+                "nome": nome,
+                "descricao": descricao,
+                "preco": float(preco),
+                "imagem": imagem
+            }
+            lista_produtos.append(produto)
+
+        return lista_produtos
 
 app = Flask(__name__)
 
@@ -20,13 +32,13 @@ def contato():
 
 @app.route("/produtos")
 def produtos():
-    return render_template('produtos.html', produtos=lista_produtos)
+    return render_template('produtos.html', produtos=obter_produtos())
 
 @app.route("/produtos/<nome>")
 def produto(nome):
-    for produto in lista_produtos:
+    for produto in obter_produtos():
         if produto["nome"].lower() == nome.lower():
-            return render_template("produto.html", produto=produto)
+            return render_template("produto.html", produto=obter_produtos())
     return "produto não encontrado"
 
 # GET
@@ -42,13 +54,12 @@ def salvar_produto():
     preco = request.form['preco']
     imagem = request.form['imagem']
     produto = {"nome": nome, "descricao": descricao, "preco": preco, "imagem": imagem}
-    lista_produtos.append(produto)
+    adicionar_produto(produto)
 
     return redirect(url_for("produtos"))
 
 @app.route("/gerador")
 def gerador():
     return render_template("gerador.html")
-
 
 app.run(port=5001)
