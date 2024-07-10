@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} Validador {%endblock %}
+
+{% block content %}
+<nav>
+    <a href="/geradorcpf">Gerador de CPF</a>
+    <a href="/geradorcnpj">Gerador de CNPJ</a>
+    <a href="/validarcpf">Validar CPF</a>
+    <a href="/validarcnpj">Validar CNPJ</a>
+</nav>
+
+<div class="container">
+    {% if is_valid %}
+        <h1>CPF Válido</h1>
+    {% else %}
+        <h1>CPF Inválido!</h1>
+    {% endif %}
+    <a>CPF: {{cpf}}</a>
+</div>
+
+{% endblock %}

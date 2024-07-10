@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} Validador {%endblock %}
+
+{% block content %}
+<nav>
+    <a href="/geradorcpf">Gerador de CPF</a>
+    <a href="/geradorcnpj">Gerador de CNPJ</a>
+    <a href="/validarcpf">Validar CPF</a>
+    <a href="/validarcnpj">Validar CNPJ</a>
+</nav>
+
+<div class="container">
+    <h1>Validar CPF</h1> <br>
+    <form method="POST">
+        <input type="text" name="cpf" id="cpf">
+        <button type="submit">Validar</button>
+    </form>
+</div>
+
+{% endblock %}

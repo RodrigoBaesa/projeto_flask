@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from validate_docbr import CNPJ, CPF
 
 def adicionar_produto(p):
     linha = f"\n{p['nome']},{p['descricao']},{p['preco']},{p['imagem']}"
@@ -19,6 +20,24 @@ def obter_produtos():
             lista_produtos.append(produto)
 
         return lista_produtos
+
+def gerar_cnpj():
+    cnpj = CNPJ()
+    new_cnpj = cnpj.generate(True)
+    return new_cnpj
+
+def gerar_cpf():
+    cpf = CPF()
+    new_cpf = cpf.generate(True)
+    return new_cpf
+
+def validar_cnpj(cnpj):
+    cnpj_validador = CNPJ()
+    return cnpj_validador.validate(cnpj)
+
+def validar_cpf(cpf):
+    cpf_validador = CPF()
+    return cpf_validador.validate(cpf)
 
 app = Flask(__name__)
 
@@ -55,11 +74,42 @@ def salvar_produto():
     imagem = request.form['imagem']
     produto = {"nome": nome, "descricao": descricao, "preco": preco, "imagem": imagem}
     adicionar_produto(produto)
-
     return redirect(url_for("produtos"))
 
-@app.route("/gerador")
-def gerador():
-    return render_template("gerador.html")
+@app.route("/geradorcnpj")
+def gerador_cnpj():
+    new_cnpj = gerar_cnpj()
+    return render_template("geradorcnpj.html", new_cnpj=new_cnpj)
+
+@app.route("/geradorcpf")
+def gerador_cpf():
+    new_cpf = gerar_cpf()
+    return render_template("geradorcpf.html", new_cpf=new_cpf)
+
+# CNPJ
+# GET
+@app.route("/validarcnpj")
+def validar_cnpj_form():
+    return render_template("validarcnpj.html")
+
+# POST
+@app.route("/validarcnpj", methods=['POST'])
+def retorno_cnpj():
+    cnpj = request.form['cnpj']
+    is_valid = validar_cnpj(cnpj)
+    return render_template("retorno_cnpj.html", is_valid=is_valid, cnpj=cnpj)
+
+# CPF
+# GET
+@app.route("/validarcpf")
+def validar_cpf_form():
+    return render_template("validarcpf.html")
+
+# POST
+@app.route("/validarcpf", methods=['POST'])
+def retorno_cpf():
+    cpf = request.form['cpf']
+    is_valid = validar_cpf(cpf)
+    return render_template("retorno_cpf.html", is_valid=is_valid, cpf=cpf)
 
 app.run(port=5001)

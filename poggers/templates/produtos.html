@@ -3,13 +3,13 @@
 {% block title %} produtos {%endblock %}
 
 {% block content %}
-<h1>produtos</h1>
+<h1>Produtos</h1>
 
 {% for produto in produtos %}
 <h2>{{ produto.nome }}</h2>
 <p>{{produto.descricao}}</p>
 <p>R$ {{ produto.preco }}</p>
-<img src="{{produto.imagem}}" alt="">
+<img src="{{produto.imagem}}" height=100 width=100 alt="">
 <a href="/produtos/{{ produto.nome}}">Ver produto</a>
 {% endfor %}
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Gerador {%endblock %}
+
+{% block content %}
+<nav>
+    <a href="/geradorcpf">Gerador de CPF</a>
+    <a href="/geradorcnpj">Gerador de CNPJ</a>
+    <a href="/validarcpf">Validar CPF</a>
+    <a href="/validarcnpj">Validar CNPJ</a>
+</nav>
+
+<div class="container">
+    <h1>Gerador de CNPJ</h1> <br>
+    <a>CNPJ: {{new_cnpj}}</a>
+</div>
+{% endblock %}

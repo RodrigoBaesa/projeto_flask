@@ -13,3 +13,9 @@ body{
 .container{
     text-align: center;
 }
+
+nav {
+    display: flex;
+    margin: 15px;
+    gap: 20px;
+}
